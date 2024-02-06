@@ -7,13 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     DisplayHairDressers();
 
-    ListHairDressers.classList.add('scroll');
-
     function DisplayHairDressers() {
         fetchData(offset);
 
-        ListHairDressers.addEventListener('scroll', function () {
-            if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
                 offset += limit + 1;
                 fetchData(offset);
             }
@@ -28,6 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     for (let i = 0; i < data.length; i++) {
                         let DivHairDresser = document.createElement('div');
                         DivHairDresser.classList.add('DivHairDresser');
+
+                        DivHairDresser.addEventListener('click', function () {
+                            DivHairDresser.classList.add("details");
+                        });
 
                         let DivInfos = document.createElement('div');
                         DivInfos.classList.add('DivInfos');

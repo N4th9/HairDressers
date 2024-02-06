@@ -1,7 +1,6 @@
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 .BanTitle {
     padding: 0;
@@ -16,10 +15,12 @@ body {
     font-size: 20px;
     padding: 20px 0 20px 20px;
 }
+.SearchAndList{
+    transition: all 1s ease;
+}
 .ListHairDressers {
-    margin: 0 0 0 20px;
-    padding: 0 20px 0 0;
-    calc(100% - 60px);
+    margin: 0;
+    padding: 0 20px 0 20px;
 }
 .DivHairDresser {
     margin: 0 0 20px 0;
@@ -30,6 +31,9 @@ body {
 .DivHairDresser:hover {
     background-color: #A54CA2FF;
     color: white;
+}
+.DivHairDresser.details{
+    width: 50%;
 }
 .DivInfos {
     margin: 0 0 0 20px;
@@ -44,7 +48,6 @@ body {
     font-size: 103px;
     color: grey;
 }
-.scroll {
-    overflow-y: scroll;
-    height: 100%;
+.InfosHairMap{
+
 }
