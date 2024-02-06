@@ -7,6 +7,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     DisplayHairDressers();
 
+    ListHairDressers.classList.add('scroll');
+
+    function DisplayHairDressers() {
+        fetchData(offset);
+
+        ListHairDressers.addEventListener('scroll', function () {
+            if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
+                offset += limit + 1;
+                fetchData(offset);
+            }
+        });
+    }
+
     function fetchData(offset) {
         fetch(localhost + `/api/HairDressers?offset=${offset}`)
             .then(response => response.json())
@@ -45,16 +58,5 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
-    }
-
-    function DisplayHairDressers() {
-        fetchData(offset);
-
-        window.addEventListener('scroll', function () {
-            if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
-                offset += limit + 1;
-                fetchData(offset);
-            }
-        });
     }
 });
