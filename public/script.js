@@ -1,18 +1,26 @@
 const localhost = 'http://localhost:3000';
+const limit = 8;
 let offset = 0;
-const limit = 7;
+let totalHairDressers = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
     const ListHairDressers = document.getElementById('ListHairDressers');
+    const pageListSearch = document.getElementById('pageListSearch');
+    const LoadHairDressers = document.getElementById('LoadHairDressers');
 
     DisplayHairDressers();
 
-    function DisplayHairDressers() {
+    LoadHairDressers.addEventListener('click', function () {
+        offset += limit;
         fetchData(offset);
+    });
+
+    function DisplayHairDressers() {
+        fetchData(offset)
 
         window.addEventListener('scroll', function () {
             if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-                offset += limit + 1;
+                offset += limit;
                 fetchData(offset);
             }
         });
@@ -24,11 +32,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(function (data) {
                 if (data.length > 0) {
                     for (let i = 0; i < data.length; i++) {
+                        totalHairDressers = totalHairDressers + 8;
                         let DivHairDresser = document.createElement('div');
                         DivHairDresser.classList.add('DivHairDresser');
 
                         DivHairDresser.addEventListener('click', function () {
-                            DivHairDresser.classList.add("details");
+                            pageListSearch.classList.add("details");
                         });
 
                         let DivInfos = document.createElement('div');
