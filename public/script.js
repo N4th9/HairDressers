@@ -3,20 +3,65 @@ const limit = 8;
 let offset = 0;
 let totalHairDressers = 0;
 
+let hairDressers = [
+    {
+        id: 0,
+        NameHairDresser: "",
+        NumberHairDresser: "",
+        StreetHairDresser: "",
+        CodePostalHairDresser: "",
+        CityHairDresser: "",
+    }
+];
+
 document.addEventListener('DOMContentLoaded', function () {
     const ListHairDressers = document.getElementById('ListHairDressers');
     const pageListSearch = document.getElementById('pageListSearch');
     const LoadHairDressers = document.getElementById('LoadHairDressers');
+    const SearchHairDressers = document.getElementById('SearchHairDressers');
 
     DisplayHairDressers();
 
-    LoadHairDressers.addEventListener('click', function () {
+    LoadHairDressers.addEventListener('click', LoadButton);
+    SearchHairDressers.addEventListener('keyup', SearchButton);
+
+    function LoadButton() {
         offset += limit;
         fetchData(offset);
-    });
+    }
+
+    function SearchButton() {
+        let search = document.getElementById('SearchHairDressers').value;
+        let DivHairDressers = ListHairDressers.getElementsByClassName('DivHairDresser');
+        if (search !== "") {
+            fetch(localhost + `/api/Search?search=${search}&offset=${offset}`)
+                .then(response => response.json())
+                .then(function (data) {
+                    if (data.length > 0) {
+                        for (let i = 0; i < DivHairDressers.length; i++) {
+                            let pIndex = DivHairDressers[i].getElementsByClassName('pIndex')[0];
+                            let hairDresserId = parseInt(pIndex.innerText.trim());
+                            let isVisible = false;
+                            for (let j = 0; j < data.length; j++) {
+                                if (data[j].id === hairDresserId) {
+                                    isVisible = true;
+                                    break;
+                                }
+                            }
+                            if (isVisible) {
+                                DivHairDressers[i].classList.remove('hidden');
+                            } else {
+                                DivHairDressers[i].classList.add('hidden');
+                            }
+                        }
+                    }
+                });
+        }
+    }
+
 
     function DisplayHairDressers() {
-        fetchData(offset)
+        fetchData(offset);
 
         window.addEventListener('scroll', function () {
             if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
