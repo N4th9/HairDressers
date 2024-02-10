@@ -16,13 +16,16 @@ app.get('/api/HairDressers', (req, res) => {
         console.log("Appel de 7 nouveaux coiffeurs");
     });
 });
+app.get('api/searchHairdressers', (req, res) => {
+    const searchQuery = req.query.term;
+    const sqlQuery = "SELECT * FROM coiffeurs WHERE nom LIKE ? OR ville LIKE ?";
+    const params = [`%${searchQuery}%`];
 
-app.get('/api/Search', (req, res) => {
-    const OFFSET = req.query.offset || 0;
-    const LIMIT = 8;
-    const SEARCH = '%' + req.query.search + '%'; // Ajoutez des jokers % pour rechercher les noms correspondants partiellement
-    db.all('SELECT id, nom, voie, ville, code_postal FROM coiffeurs WHERE nom LIKE ? LIMIT ? OFFSET ?', [SEARCH, LIMIT, OFFSET], (err, rows) => {
+    db.all(sqlQuery, params, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
         res.send(rows);
-        console.log("Appel de 7 nouveaux coiffeurs");
     });
-})
+});
