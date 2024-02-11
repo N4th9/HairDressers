@@ -6,6 +6,8 @@
     <title>Coiff'EUR</title>
     <script src="script.js"></script>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
 <div class="BanTitle">
@@ -15,7 +17,7 @@
 </div>
 <div class="hairdressersInfos">
     <div id="pageListSearch" class="pageListSearch">
-        <ul>
+        <ul class="AllList">
             <input id="SearchHairDressers" class="SearchHairDressers" type="text" placeholder="Rechercher un coiffeur ...">
             <ul id="ListHairDressers" class="ListHairDressers">
             </ul>
@@ -37,6 +39,8 @@
             <p id="CodePostalHairDresser"></p>
             <p id="VilleHairDresser"></p>
         </div>
+    </div>
+    <div class="MapLocation" id="MapContainerLocation">
     </div>
 </div>
 </body>
