@@ -16,16 +16,14 @@ app.get('/api/HairDressers', (req, res) => {
         console.log("Appel de 7 nouveaux coiffeurs");
     });
 });
-app.get('api/searchHairdressers', (req, res) => {
-    const searchQuery = req.query.term;
-    const sqlQuery = "SELECT * FROM coiffeurs WHERE nom LIKE ? OR ville LIKE ?";
-    const params = [`%${searchQuery}%`];
-
-    db.all(sqlQuery, params, (err, rows) => {
+app.get('/api/searchHairdressers', (req, res) => {
+    const term = req.query.term;
+    db.all('SELECT id, nom, voie, ville, code_postal FROM coiffeurs WHERE nom LIKE ?', [`%${term}%`], (err, rows) => {
         if (err) {
-            res.status(500).json({ error: err.message });
-            return;
+            console.error('Erreur lors de la recherche de coiffeurs dans la base de données :', err);
+            res.status(500).send('Erreur lors de la recherche de coiffeurs dans la base de données');
+        } else {
+            res.send(rows);
         }
-        res.send(rows);
     });
 });
