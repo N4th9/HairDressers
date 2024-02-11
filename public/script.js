@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const CodePostalHairDresser = document.getElementById("CodePostalHairDresser")
     const VilleHairDresser = document.getElementById("VilleHairDresser")
     const MapContainerLocation = document.getElementById("MapContainerLocation")
+    const CloseHairDresser = document.getElementById("CloseHairDresser")
+    const Login = document.getElementById("Login")
 
     DisplayHairDressers();
 
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pageListSearch.classList.remove("details");
             DivHairDresser.classList.remove("Purple");
             SearchHairDressers.classList.remove("searchDetails")
+            CloseHairDresser.style.transform = 'rotate(0deg) scale(0)';
         } else {
             const allHairDressers = document.querySelectorAll('.DivHairDresser');
             allHairDressers.forEach(hairDresser => {
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
             BackList.classList.add("details");
             DivHairDresser.classList.add("Purple");
             SearchHairDressers.classList.add("searchDetails")
+            CloseHairDresser.style.transform = 'rotate(0deg) scale(1)';
             console.log(data[i]);
         }
         MyActualHairDresser.id = data[i].id;

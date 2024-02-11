@@ -13,10 +13,38 @@ body {
     width: 100%;
     position: fixed;
 }
+.container {
+    display: flex;
+}
 .Title {
     margin: 0;
     font-size: 20px;
-    padding: 20px 0 20px 80px;
+    padding: 20px 0 20px 57px;
+}
+.Login{
+    margin: 10px 0 0 90%;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    z-index: 12;
+    background: white;
+    border-radius: 20px;
+    position: absolute;
+}
+.Rotation{
+    margin-left: 96%;
+    margin-top: 55px;
+    position: absolute;
+    z-index: 7;
+    border-radius: 50%;
+    font-size: 20px;
+    background-color: purple;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px 5px 10px;
+    border: 0;
+    transition: transform 0.5s ease, scale 0.5s ease;
+    transform: rotate(-90deg) scale(0);
 }
 .hairdressersInfos{
     display: flex;
