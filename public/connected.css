@@ -1,0 +1,39 @@
+.divLogin{
+    margin: 20% 0 0 40%;
+    border: 5px solid #F2E6ECFF;
+    width: 545px;
+    border-radius: 4px;
+    position: absolute;
+}
+.detailsLogin{
+    margin: 26px 0 50px 53px;
+    height: 190px;
+    width: 200px;
+}
+.pLogin{
+    margin-bottom: 0;
+}
+.inputLogin{
+    background: whitesmoke;
+    width: 452px;
+    border-radius: 3px;
+    height: 32px;
+    border: 0;
+    font-size: 20px;
+}
+.divButtonLogin{
+    display: flex;
+    justify-content: center;
+    width: 425px;
+}
+.buttonLogin{
+    margin-left: 53px;
+    margin-top: 20px;
+    background-color: purple;
+    color: white;
+    border: 0;
+    border-radius: 44px;
+    width: 452px;
+    height: 51px;
+    font-size: 20px;
+}

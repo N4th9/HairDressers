@@ -30,6 +30,7 @@ body {
     background: white;
     border-radius: 20px;
     position: absolute;
+    cursor: pointer;
 }
 .Rotation{
     margin-left: 96%;

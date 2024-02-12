@@ -34,7 +34,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     LoadHairDressers.addEventListener('click', LoadButton);
     SearchHairDressers.addEventListener('keyup', SearchButton);
+    CloseHairDresser.addEventListener('click', CloseX);
+    Login.addEventListener('click', LogYou);
 
+    function LogYou() {
+        window.location.href = '/connected.html';
+    }
+    function CloseX() {
+        pageListSearch.classList.remove("details");
+        SearchHairDressers.classList.remove("searchDetails")
+        CloseHairDresser.style.transform = 'rotate(0deg) scale(0)';
+        const allHairDressers = document.querySelectorAll('.DivHairDresser');
+        allHairDressers.forEach(hairDresser => {
+            hairDresser.classList.remove("Purple");
+        });
+    }
     function LoadInfosHairDresser(DivHairDresser, data, i) {
         console.log(data[i])
         if (DivHairDresser.classList.contains("Purple")) {
