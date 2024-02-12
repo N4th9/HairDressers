@@ -1,6 +1,7 @@
 const localhost = 'http://localhost:3000';
 const limit = 8;
 let offset = 0;
+let isLogged = false;
 
 let MyActualHairDresser = [
     {
@@ -29,13 +30,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const MapContainerLocation = document.getElementById("MapContainerLocation")
     const CloseHairDresser = document.getElementById("CloseHairDresser")
     const Login = document.getElementById("Login")
+    const Logout = document.getElementById("Logout")
+    const InfosHairDressers = document.getElementById("InfosHairDressers")
+    const ContainerInfos = document.getElementById("ContainerInfos")
+    const ChangeMapLocation = document.getElementById("ChangeMapLocation")
 
     DisplayHairDressers();
+    StatusConnected();
 
     LoadHairDressers.addEventListener('click', LoadButton);
     SearchHairDressers.addEventListener('keyup', SearchButton);
     CloseHairDresser.addEventListener('click', CloseX);
     Login.addEventListener('click', LogYou);
+    Logout.addEventListener('click', NotConnected);
 
     function LogYou() {
         window.location.href = '/connected.html';
@@ -50,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     function LoadInfosHairDresser(DivHairDresser, data, i) {
-        console.log(data[i])
         if (DivHairDresser.classList.contains("Purple")) {
             pageListSearch.classList.remove("details");
             DivHairDresser.classList.remove("Purple");
@@ -86,22 +92,32 @@ document.addEventListener('DOMContentLoaded', function () {
         let latitude = MyActualHairDresser.Latitude;
         let longitude = MyActualHairDresser.Longitude;
 
-        if (MyActualHairDresser.Latitude !== undefined && MyActualHairDresser.Longitude !== undefined) {
+        if (isLogged) {
             const mapContainer = document.createElement("div");
             mapContainer.id = 'map';
-            mapContainer.classList.add("maps");
+            ChangeMapLocation.innerHTML = "";
+            mapContainer.classList.add("maps2");
+            ChangeMapLocation.appendChild(mapContainer);
+            const MyMap = L.map(mapContainer).setView([latitude, longitude], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(MyMap);
+            L.marker([latitude, longitude]).addTo(MyMap)
+                .bindPopup('Emplacement')
+                .openPopup();
+        }else if (!isLogged){
+            const mapContainer = document.createElement("div");
+            mapContainer.id = 'map';
             MapContainerLocation.innerHTML = "";
+            mapContainer.classList.add("maps");
             MapContainerLocation.appendChild(mapContainer);
             const MyMap = L.map(mapContainer).setView([latitude, longitude], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(MyMap);
-
             L.marker([latitude, longitude]).addTo(MyMap)
                 .bindPopup('Emplacement')
                 .openPopup();
-        } else {
-            console.error("Latitude ou longitude manquante pour le coiffeur :", data[i]);
         }
     }
     function DataHairDressers(data) {
@@ -182,6 +198,34 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(function (data) {
                 DataHairDressers(data);
+            });
+    }
+    function StatusConnected() {
+        fetch(localhost + "/api/IsLoggedIn")
+            .then(response => response.json())
+            .then(data => {
+                isLogged = data.isLoggedIn;
+                if (isLogged) {
+                    Login.classList.add("Hidden")
+                    Logout.classList.remove("Hidden")
+                    ContainerInfos.classList.remove("Hidden")
+                    InfosHairDressers.classList.add("Hidden")
+                    MapContainerLocation.classList.add("Hidden")
+                }else{
+                    Login.classList.remove("Hidden")
+                    Logout.classList.add("Hidden")
+                    ContainerInfos.classList.add("Hidden")
+                    InfosHairDressers.classList.remove("Hidden")
+                    MapContainerLocation.classList.remove("Hidden")
+                }
+            });
+    }
+    function NotConnected() {
+        fetch(localhost + "/api/Logout")
+            .then(response => response.json())
+            .then(data => {
+                isLogged = data.isLoggedIn;
+                window.location.href = window.location.origin;
             });
     }
 });

@@ -14,6 +14,7 @@
     <div class="container">
         <p class="Title">Coiff'EUR</p>
         <img id="Login" class="Login" src="img/Login.svg" alt="Login">
+        <img id="Logout" class="Login" src="img/Logout.svg" alt="Logout">
     </div>
 </div>
 <button class="Rotation" id="CloseHairDresser">X</button>
@@ -28,7 +29,7 @@
         </ul>
         <button id="LoadHairDressers" class="LoadHairDressers">Charger plus ...</button>
     </div>
-    <div class="InfosHairDressers">
+    <div id="InfosHairDressers" class="InfosHairDressers">
         <div class="StatInfos">
             <p>Nom</p>
             <p>Numero</p>
@@ -45,6 +46,26 @@
         </div>
     </div>
     <div class="MapLocation" id="MapContainerLocation">
+    </div>
+    <div class="ChangeInfos" id="ChangeInfos">
+        <div class="ContainerInfos" id="ContainerInfos">
+            <p style="padding-top: 20px" class="UpdateP">Nom </p>
+            <input type="text" class="UpdateInput" id="UpdateName"/>
+            <p class="UpdateP">Numero </p>
+            <input type="number" class="UpdateInput" id="UpdateNumber"/>
+            <p class="UpdateP">Voie </p>
+            <input type="text" class="UpdateInput" id="UpdateRue"/>
+            <p class="UpdateP">Code postal </p>
+            <input type="number" class="UpdateInput" id="UpdateCodePostal"/>
+            <p class="UpdateP">Ville </p>
+            <input type="text" class="UpdateInput" id="UpdateCity"/>
+            <p class="UpdateP">Latitude </p>
+            <input type="number" class="UpdateInput" id="UpdateLatitude"/>
+            <p class="UpdateP">Longitude </p>
+            <input type="number" class="UpdateInput" id="UpdateLongitude"/>
+        </div>
+        <div class="ChangeLocation" id="ChangeMapLocation">
+        </div>
     </div>
 </div>
 </body>
