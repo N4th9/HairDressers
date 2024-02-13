@@ -192,7 +192,7 @@ body {
     background: white;
     margin: 20px;
     padding-top: 5px;
-    height: 610px
+    height: 640px
 }
 .ChangeP{
     margin-left: 73px;
@@ -215,6 +215,9 @@ body {
 .scroll{
     overflow-y: auto;
     z-index: 4;
+}
+.ChangeHairDresser{
+    margin: 22px 0 0 45%;
 }
 .Hidden{
     display: none;

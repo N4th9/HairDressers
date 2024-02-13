@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ChangeCity = document.getElementById("ChangeCity")
     const ChangeLatitude = document.getElementById("ChangeLatitude")
     const ChangeLongitude = document.getElementById("ChangeLongitude")
-
+    const ChangeHairDresser = document.getElementById("ChangeHairDresser")
 
     DisplayHairDressers();
     StatusConnected();
@@ -51,7 +51,67 @@ document.addEventListener('DOMContentLoaded', function () {
     CloseHairDresser.addEventListener('click', CloseX);
     Login.addEventListener('click', LogYou);
     Logout.addEventListener('click', NotConnected);
+    ChangeHairDresser.addEventListener('click', SaveInfosHairDresser);
 
+    function SaveInfosHairDresser() {
+        const id = MyActualHairDresser.id;
+        const nom = ChangeName.value;
+        const numero = ChangeNumber.value;
+        const voie = ChangeRue.value;
+        const code_postal = ChangeCodePostal.value;
+        const ville = ChangeCity.value;
+        const latitude = ChangeLatitude.value;
+        const longitude = ChangeLongitude.value;
+
+        fetch(localhost + `/api/HairDressers/${id}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nom: nom, numero: numero, voie: voie, ville: ville, code_postal: code_postal, latitude: latitude, longitude: longitude })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Coiffeur modifié avec succès.');
+                } else {
+                    alert('Erreur lors de la modification du coiffeur.');
+                }
+            }).then(data => {
+                ChangeName.innerText = nom;
+                ChangeNumber.innerText = numero;
+                ChangeRue.innerText = voie;
+                ChangeCodePostal.innerText = code_postal;
+                ChangeCity.innerText = ville;
+                ChangeLatitude.value = latitude;
+                ChangeLongitude.value = longitude;
+            if (typeof MyMap !== 'undefined') {
+                MyMap.setView([latitude, longitude], 15);
+                MyMap.eachLayer(layer => {
+                    if (layer instanceof L.Marker) {
+                        layer.setLatLng([latitude, longitude]);
+                    }
+                });
+            } else {
+                const mapContainer = document.createElement("div");
+                mapContainer.id = 'map';
+                ChangeMapLocation.innerHTML = "";
+                mapContainer.classList.add("maps2");
+                ChangeMapLocation.appendChild(mapContainer);
+                MyMap = L.map(mapContainer).setView([latitude, longitude], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(MyMap);
+                L.marker([latitude, longitude]).addTo(MyMap)
+                    .bindPopup('Emplacement')
+                    .openPopup();
+            }
+                alert('Coiffeur modifié avec succès.');
+        })
+            .catch(error => {
+                console.error('Erreur lors de la requête:', error);
+                alert('Erreur lors de la modification du coiffeur.');
+            });
+    }
     function LogYou() {
         window.location.href = '/connected.html';
     }
@@ -91,6 +151,11 @@ document.addEventListener('DOMContentLoaded', function () {
         MyActualHairDresser.Latitude = data[i].latitude;
         MyActualHairDresser.Longitude = data[i].longitude;
 
+        MyActualHairDresser.Latitude = data[i].latitude;
+        MyActualHairDresser.Longitude = data[i].longitude;
+        let latitude = MyActualHairDresser.Latitude;
+        let longitude = MyActualHairDresser.Longitude;
+
         if (isLogged) {
             ChangeName.value = MyActualHairDresser.name;
             ChangeNumber.value = MyActualHairDresser.Number;
@@ -99,20 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ChangeCity.value = MyActualHairDresser.City;
             ChangeLatitude.value = MyActualHairDresser.Latitude;
             ChangeLongitude.value = MyActualHairDresser.Longitude;
-        }else if (!isLogged){
-            NomHairDresser.innerText = MyActualHairDresser.name;
-            NumeroHairDresser.innerText = MyActualHairDresser.Number;
-            VoieHairDresser.innerText = MyActualHairDresser.Rue;
-            CodePostalHairDresser.innerText = MyActualHairDresser.PostalCode;
-            VilleHairDresser.innerText = MyActualHairDresser.City;
-        }
 
-        MyActualHairDresser.Latitude = data[i].latitude;
-        MyActualHairDresser.Longitude = data[i].longitude;
-        let latitude = MyActualHairDresser.Latitude;
-        let longitude = MyActualHairDresser.Longitude;
-
-        if (isLogged) {
             const mapContainer = document.createElement("div");
             mapContainer.id = 'map';
             ChangeMapLocation.innerHTML = "";
@@ -125,7 +177,15 @@ document.addEventListener('DOMContentLoaded', function () {
             L.marker([latitude, longitude]).addTo(MyMap)
                 .bindPopup('Emplacement')
                 .openPopup();
+
+            ChangeHairDresser.innerText = "Enregistrer";
         }else if (!isLogged){
+            NomHairDresser.innerText = MyActualHairDresser.name;
+            NumeroHairDresser.innerText = MyActualHairDresser.Number;
+            VoieHairDresser.innerText = MyActualHairDresser.Rue;
+            CodePostalHairDresser.innerText = MyActualHairDresser.PostalCode;
+            VilleHairDresser.innerText = MyActualHairDresser.City;
+
             const mapContainer = document.createElement("div");
             mapContainer.id = 'map';
             MapContainerLocation.innerHTML = "";
@@ -231,12 +291,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     ContainerInfos.classList.remove("Hidden")
                     InfosHairDressers.classList.add("Hidden")
                     MapContainerLocation.classList.add("Hidden")
+                    ChangeHairDresser.classList.remove("Hidden")
                 }else{
                     Login.classList.remove("Hidden")
                     Logout.classList.add("Hidden")
                     ContainerInfos.classList.add("Hidden")
                     InfosHairDressers.classList.remove("Hidden")
                     MapContainerLocation.classList.remove("Hidden")
+                    ChangeHairDresser.classList.add("Hidden")
                 }
             });
     }
