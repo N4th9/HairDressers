@@ -191,16 +191,18 @@ body {
 .ContainerInfos{
     background: white;
     margin: 20px;
+    padding-top: 5px;
     height: 610px
 }
-.UpdateP{
+.ChangeP{
     margin-left: 73px;
     margin-top: 30px;
     margin-bottom: -19px;
     text-align: left;
-    color: grey
+    color: grey;
+    position: relative;
 }
-.UpdateInput{
+.ChangeInput{
     font-size: 15px;
     margin-left: 73px;
     margin-top: 20px;

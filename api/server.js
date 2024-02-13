@@ -39,6 +39,18 @@ app.get('/api/searchHairdressers', (req, res) => {
         }
     });
 });
+app.put('/api/HairDressers/:id', (req, res) => {
+    const id = req.params.id;
+    const { nom, numero, voie, ville, code_postal, latitude, longitude } = req.body;
+    db.run('UPDATE coiffeurs SET nom = ?, numero = ?, voie = ?, ville = ?, code_postal = ?, latitude = ?, longitude = ? WHERE id = ?', [nom, numero, voie, ville, code_postal, latitude, longitude, id], (err) => {
+        if (err) {
+            console.error('Erreur lors de la modification du coiffeur dans la base de données :', err);
+            res.status(500).send('Erreur lors de la modification du coiffeur dans la base de données');
+        } else {
+            res.status(200).send('Coiffeur modifié avec succès');
+        }
+    });
+});
 
 const UserPath = path.resolve(__dirname, 'data/user.json');
 let isLoggedIn = false;

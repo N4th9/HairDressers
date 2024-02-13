@@ -34,6 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const InfosHairDressers = document.getElementById("InfosHairDressers")
     const ContainerInfos = document.getElementById("ContainerInfos")
     const ChangeMapLocation = document.getElementById("ChangeMapLocation")
+    const ChangeName = document.getElementById("ChangeName")
+    const ChangeNumber = document.getElementById("ChangeNumber")
+    const ChangeRue = document.getElementById("ChangeRue")
+    const ChangeCodePostal = document.getElementById("ChangeCodePostal")
+    const ChangeCity = document.getElementById("ChangeCity")
+    const ChangeLatitude = document.getElementById("ChangeLatitude")
+    const ChangeLongitude = document.getElementById("ChangeLongitude")
+
 
     DisplayHairDressers();
     StatusConnected();
@@ -80,12 +88,24 @@ document.addEventListener('DOMContentLoaded', function () {
         MyActualHairDresser.Rue = data[i].voie;
         MyActualHairDresser.PostalCode = data[i].code_postal;
         MyActualHairDresser.City = data[i].ville;
+        MyActualHairDresser.Latitude = data[i].latitude;
+        MyActualHairDresser.Longitude = data[i].longitude;
 
-        NomHairDresser.innerText = MyActualHairDresser.name;
-        NumeroHairDresser.innerText = MyActualHairDresser.Number;
-        VoieHairDresser.innerText = MyActualHairDresser.Rue;
-        CodePostalHairDresser.innerText = MyActualHairDresser.PostalCode;
-        VilleHairDresser.innerText = MyActualHairDresser.City;
+        if (isLogged) {
+            ChangeName.value = MyActualHairDresser.name;
+            ChangeNumber.value = MyActualHairDresser.Number;
+            ChangeRue.value = MyActualHairDresser.Rue;
+            ChangeCodePostal.value = MyActualHairDresser.PostalCode;
+            ChangeCity.value = MyActualHairDresser.City;
+            ChangeLatitude.value = MyActualHairDresser.Latitude;
+            ChangeLongitude.value = MyActualHairDresser.Longitude;
+        }else if (!isLogged){
+            NomHairDresser.innerText = MyActualHairDresser.name;
+            NumeroHairDresser.innerText = MyActualHairDresser.Number;
+            VoieHairDresser.innerText = MyActualHairDresser.Rue;
+            CodePostalHairDresser.innerText = MyActualHairDresser.PostalCode;
+            VilleHairDresser.innerText = MyActualHairDresser.City;
+        }
 
         MyActualHairDresser.Latitude = data[i].latitude;
         MyActualHairDresser.Longitude = data[i].longitude;
