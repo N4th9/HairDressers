@@ -225,6 +225,12 @@ body {
     padding: 8px;
     border-radius: 16px;
 }
+.AddHairDresser{
+    position: absolute;
+    width: 33px;
+    margin: 13px 0 0 85%;
+    border-radius: 18px;
+}
 .Hidden{
     display: none;
 }

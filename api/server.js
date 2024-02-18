@@ -51,6 +51,17 @@ app.put('/api/HairDressers/:id', (req, res) => {
         }
     });
 });
+app.post('/api/HairDressers', (req, res) => {
+    const { nom, numero, voie, ville, code_postal, latitude, longitude } = req.body;
+    db.run('INSERT INTO coiffeurs (nom, numero, voie, ville, code_postal, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)', [nom, numero, voie, ville, code_postal, latitude, longitude], (err) => {
+        if (err) {
+            console.error('Erreur lors de l\'ajout du coiffeur dans la base de données :', err);
+            res.status(500).send('Erreur lors de l\'ajout du coiffeur dans la base de données');
+        } else {
+            res.status(201).send('Coiffeur ajouté avec succès');
+        }
+    });
+});
 
 const UserPath = path.resolve(__dirname, 'data/user.json');
 let isLoggedIn = false;

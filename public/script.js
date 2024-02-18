@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ChangeLatitude = document.getElementById("ChangeLatitude")
     const ChangeLongitude = document.getElementById("ChangeLongitude")
     const ChangeHairDresser = document.getElementById("ChangeHairDresser")
+    const AddHairDresser = document.getElementById("AddHairDresser")
 
     DisplayHairDressers();
     StatusConnected();
@@ -51,8 +52,29 @@ document.addEventListener('DOMContentLoaded', function () {
     CloseHairDresser.addEventListener('click', CloseX);
     Login.addEventListener('click', LogYou);
     Logout.addEventListener('click', NotConnected);
-    ChangeHairDresser.addEventListener('click', SaveInfosHairDresser);
+    AddHairDresser.addEventListener('click', OpenInsertion);
+    ChangeHairDresser.addEventListener("click", function () {
+        if (ChangeHairDresser.innerText === "Enregistrer") {
+            SaveInfosHairDresser();
+        } else if (ChangeHairDresser.innerText === "Ajouter") {
+            InsertInfosHairDresser();
+        }
+    });
 
+    function OpenInsertion() {
+        pageListSearch.classList.add("details");
+        SearchHairDressers.classList.add("searchDetails")
+        CloseHairDresser.style.transform = 'rotate(0deg) scale(1)';
+        ChangeHairDresser.innerText = "Ajouter";
+        ChangeMapLocation.innerHTML = "";
+        ChangeName.value = "";
+        ChangeNumber.value = "";
+        ChangeRue.value = "";
+        ChangeCodePostal.value = "";
+        ChangeCity.value = "";
+        ChangeLatitude.value = "";
+        ChangeLongitude.value = "";
+    }
     function SaveInfosHairDresser() {
         const id = MyActualHairDresser.id;
         const nom = ChangeName.value;
@@ -109,6 +131,42 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Erreur lors de la requête:', error);
                 alert('Erreur lors de la modification du coiffeur.');
+            });
+    }
+    function InsertInfosHairDresser() {
+        const nom = ChangeName.value;
+        const numero = ChangeNumber.value;
+        const voie = ChangeRue.value;
+        const code_postal = ChangeCodePostal.value;
+        const ville = ChangeCity.value;
+        const latitude = ChangeLatitude.value;
+        const longitude = ChangeLongitude.value;
+
+        fetch(localhost + `/api/HairDressers`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nom: nom, numero: numero, voie: voie, ville: ville, code_postal: code_postal, latitude: latitude, longitude: longitude })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Coiffeur ajouté avec succès.');
+                } else {
+                    alert('Erreur lors de l\'ajout du coiffeur.');
+                }
+            }).then(() => {
+                ChangeName.value = "";
+                ChangeNumber.value = "";
+                ChangeRue.value = "";
+                ChangeCodePostal.value = "";
+                ChangeCity.value = "";
+                ChangeLatitude.value = "";
+                ChangeLongitude.value = "";
+            })
+            .catch(error => {
+                console.error('Erreur lors de la requête:', error);
+                alert('Erreur lors de l\'ajout du coiffeur.');
             });
     }
     function LogYou() {
@@ -290,6 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     InfosHairDressers.classList.add("Hidden")
                     MapContainerLocation.classList.add("Hidden")
                     ChangeHairDresser.classList.remove("Hidden")
+                    AddHairDresser.classList.remove("Hidden")
                 }else{
                     Login.classList.remove("Hidden")
                     Logout.classList.add("Hidden")
@@ -297,6 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     InfosHairDressers.classList.remove("Hidden")
                     MapContainerLocation.classList.remove("Hidden")
                     ChangeHairDresser.classList.add("Hidden")
+                    AddHairDresser.classList.add("Hidden")
                 }
             });
     }
