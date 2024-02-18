@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     alert('Erreur lors de la modification du coiffeur.');
                 }
-            }).then(data => {
+            }).then(() => {
                 ChangeName.innerText = nom;
                 ChangeNumber.innerText = numero;
                 ChangeRue.innerText = voie;
@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     .bindPopup('Emplacement')
                     .openPopup();
             }
-                alert('Coiffeur modifié avec succès.');
         })
             .catch(error => {
                 console.error('Erreur lors de la requête:', error);
@@ -140,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function () {
             DivHairDresser.classList.add("Purple");
             SearchHairDressers.classList.add("searchDetails")
             CloseHairDresser.style.transform = 'rotate(0deg) scale(1)';
-            console.log(data[i]);
         }
         MyActualHairDresser.id = data[i].id;
         MyActualHairDresser.name = data[i].nom;

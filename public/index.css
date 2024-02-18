@@ -217,7 +217,13 @@ body {
     z-index: 4;
 }
 .ChangeHairDresser{
-    margin: 22px 0 0 45%;
+    margin: 22px 0 0 43%;
+    text-align: center;
+    background: purple;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 16px;
 }
 .Hidden{
     display: none;
