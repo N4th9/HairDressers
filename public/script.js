@@ -2,6 +2,7 @@ const localhost = 'http://localhost:3000';
 const limit = 8;
 let offset = 0;
 let isLogged = false;
+let NbFavorites = 0;
 
 let MyActualHairDresser = [
     {
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ChangeLongitude = document.getElementById("ChangeLongitude")
     const ChangeHairDresser = document.getElementById("ChangeHairDresser")
     const AddHairDresser = document.getElementById("AddHairDresser")
+    const NbFavoritesHairDressers = document.getElementById("NbFavoritesHairDressers")
 
     DisplayHairDressers();
     StatusConnected();
@@ -285,13 +287,66 @@ document.addEventListener('DOMContentLoaded', function () {
                 pIndex.innerHTML = `<p class="pIndex">${data[i].id}</p>`;
                 pIndex.classList.add('pIndex');
 
-                DivHairDresser.appendChild(DivInfos);
-                DivHairDresser.appendChild(DivIndex);
+                let DivStarsAndInfos = document.createElement('div');
+                DivStarsAndInfos.classList.add('DivStarsAndInfos');
+
+                let starIcon = document.createElement('i')
+                const id = MyActualHairDresser.id;;
+                if (isLogged) {
+                    starIcon.classList.add('fas', 'fa-star');
+                    starIcon.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                        if (starIcon.classList.contains('favorite')) {
+                            starIcon.classList.remove('favorite');
+                            NbFavorites--;
+                            fetch(localhost + '/api/favorite/' + id, {
+                                method: "PUT"
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        console.log('Coiffeur retiré des favoris');
+                                    } else {
+                                        console.error('Erreur lors de la requête');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Erreur lors de la requête:', error);
+                                });
+                        } else {
+                            starIcon.classList.add('favorite');
+                            NbFavorites++;
+                            fetch(localhost + '/api/favorite/' + id, {
+                                method: "PUT"
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        console.log('Coiffeur ajouté aux favoris');
+                                    } else {
+                                        console.error('Erreur lors de la requête');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Erreur lors de la requête:', error);
+                                });
+                        }
+                        if (NbFavorites === 0) {
+                            NbFavoritesHairDressers.innerText = "";
+                        } else if (NbFavorites === 1) {
+                            NbFavoritesHairDressers.innerText = NbFavorites + " favori";
+                        } else if (NbFavorites > 1) {
+                            NbFavoritesHairDressers.innerText = NbFavorites + " favoris";
+                        }
+                    });
+                }
+                DivHairDresser.appendChild(DivStarsAndInfos);
+                DivStarsAndInfos.appendChild(starIcon);
+                DivStarsAndInfos.appendChild(DivInfos);
                 DivInfos.appendChild(pTitle);
                 DivInfos.appendChild(pVoie);
                 DivInfos.appendChild(pCodeVille);
+                DivHairDresser.appendChild(DivIndex);
                 DivIndex.appendChild(pIndex);
-                ListHairDressers.appendChild(DivHairDresser); // Ajout à la liste existante
+                ListHairDressers.appendChild(DivHairDresser);
             }
         }
     }
@@ -349,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     MapContainerLocation.classList.add("Hidden")
                     ChangeHairDresser.classList.remove("Hidden")
                     AddHairDresser.classList.remove("Hidden")
+                    NbFavoritesHairDressers.classList.remove("Hidden")
                 }else{
                     Login.classList.remove("Hidden")
                     Logout.classList.add("Hidden")
@@ -357,6 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     MapContainerLocation.classList.remove("Hidden")
                     ChangeHairDresser.classList.add("Hidden")
                     AddHairDresser.classList.add("Hidden")
+                    NbFavoritesHairDressers.classList.add("Hidden")
                 }
             });
     }

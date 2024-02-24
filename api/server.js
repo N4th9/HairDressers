@@ -21,7 +21,7 @@ const db = new sqlite3.Database('api/data/HairDressers.db');
 app.get('/api/HairDressers', (req, res) => {
     const OFFSET = req.query.offset || 0;
     const LIMIT = 8;
-    db.all('SELECT id, nom, numero, voie, ville, code_postal, latitude, longitude FROM coiffeurs LIMIT ? OFFSET ?', [LIMIT, OFFSET], (err, rows) => {
+    db.all('SELECT id, nom, numero, voie, ville, code_postal, latitude, longitude, favori FROM coiffeurs LIMIT ? OFFSET ?', [LIMIT, OFFSET], (err, rows) => {
         res.send(rows);
         console.log("Appel de 7 nouveaux coiffeurs");
     });
@@ -30,7 +30,7 @@ app.get('/api/searchHairdressers', (req, res) => {
     const term = req.query.term;
     const OFFSET = parseInt(req.query.offset) || 0;
     const LIMIT = 8;
-    db.all('SELECT id, nom, numero, voie, ville, code_postal, latitude, longitude FROM coiffeurs WHERE nom LIKE ? LIMIT ? OFFSET ?', [`%${term}%`, LIMIT, OFFSET], (err, rows) => {
+    db.all('SELECT id, nom, numero, voie, ville, code_postal, latitude, longitude, favori FROM coiffeurs WHERE nom LIKE ? LIMIT ? OFFSET ?', [`%${term}%`, LIMIT, OFFSET], (err, rows) => {
         if (err) {
             console.error('Erreur lors de la recherche de coiffeurs dans la base de données :', err);
             res.status(500).send('Erreur lors de la recherche de coiffeurs dans la base de données');
@@ -95,4 +95,16 @@ app.get("/api/IsLoggedIn", (req, res) => {
 app.get("/api/Logout", (req, res) => {
     isLoggedIn = false;
     res.status(200).send({ message: "Déconnexion réussie" });
+});
+app.put("/api/favorite/:id", (req, res) => {
+    const id = req.params.id;
+    const favori = req.body.favori;
+    db.run('UPDATE coiffeurs SET favori = ? WHERE id = ?', [favori, id], (err) => {
+        if (err) {
+            console.error('Erreur lors de la modification du coiffeur dans la base de données :', err);
+            res.status(500).send('Erreur lors de la modification du coiffeur dans la base de données');
+        } else {
+            res.status(200).send('Coiffeur modifié avec succès');
+        }
+    });
 });
