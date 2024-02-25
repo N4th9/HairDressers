@@ -27,7 +27,26 @@
 <div class="hairdressersInfos">
     <div id="pageListSearch" class="pageListSearch">
         <ul class="AllList">
-            <input id="SearchHairDressers" class="SearchHairDressers" type="text" placeholder="Rechercher un coiffeur ...">
+            <input id="SearchHairDressers" class="SearchHairDressers" type="text" placeholder="Rechercher un coiffeur ..."><button id="MoreSearch" class="MoreSearch">. . .</button>
+            <div class="divSearch" id="divSearch">
+                <p class="pInfosSearch">Rechercher dans :</p>
+                <select id="selectOne" class="inputInfosSearch">
+                    <option value="nom">Nom ou Ville</option>
+                    <option value="Nom">Nom</option>
+                    <option value="numero">Numéro</option>
+                    <option value="rue">Voie</option>
+                    <option value="codePostal">Code Postal</option>
+                    <option value="ville">Ville</option>
+                </select>
+                <p class="pInfosSearch">Trier par :</p>
+                <select id="selectTwo" class="inputInfosSearch">
+                    <option value="nom">Nom</option>
+                    <option value="numero">Numéro</option>
+                    <option value="rue">Voie</option>
+                    <option value="codePostal">Code Postal</option>
+                    <option value="ville">Ville</option>
+                </select>
+            </div>
             <ul id="ListHairDressers" class="ListHairDressers">
             </ul>
         </ul>

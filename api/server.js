@@ -96,15 +96,69 @@ app.get("/api/Logout", (req, res) => {
     isLoggedIn = false;
     res.status(200).send({ message: "Déconnexion réussie" });
 });
-app.put("/api/favorite/:id", (req, res) => {
-    const id = req.params.id;
-    const favori = req.body.favori;
-    db.run('UPDATE coiffeurs SET favori = ? WHERE id = ?', [favori, id], (err) => {
+app.put("/api/favorite1/:id", (req, res) => {
+    db.run('UPDATE coiffeurs SET favori = 1 WHERE id = ?', [req.params.id], (err) => {
         if (err) {
             console.error('Erreur lors de la modification du coiffeur dans la base de données :', err);
             res.status(500).send('Erreur lors de la modification du coiffeur dans la base de données');
         } else {
             res.status(200).send('Coiffeur modifié avec succès');
+        }
+    });
+});
+app.put("/api/favorite0/:id", (req, res) => {
+    db.run('UPDATE coiffeurs SET favori = 0 WHERE id = ?', [req.params.id], (err) => {
+        if (err) {
+            console.error('Erreur lors de la modification du coiffeur dans la base de données :', err);
+            res.status(500).send('Erreur lors de la modification du coiffeur dans la base de données');
+        } else {
+            res.status(200).send('Coiffeur modifié avec succès');
+        }
+    });
+});
+app.get('/api/searchHairdressers', (req, res) => {
+    const term = req.query.term || ''; // Default value for term
+    const OFFSET = parseInt(req.query.offset) || 0;
+    const LIMIT = 8;
+    const searchBy = req.query.searchBy || 'nom'; // Default value for searchBy
+    const sortBy = req.query.sortBy || 'nom'; // Default value for sortBy
+
+    let sqlQuery = 'SELECT id, nom, numero, voie, ville, code_postal, latitude, longitude, favori FROM coiffeurs WHERE ';
+
+    if (searchBy === 'nom') {
+        sqlQuery += 'nom LIKE ?';
+    } else if (searchBy === 'numero') {
+        sqlQuery += 'numero LIKE ?';
+    } else if (searchBy === 'rue') {
+        sqlQuery += 'voie LIKE ?';
+    } else if (searchBy === 'codePostal') {
+        sqlQuery += 'code_postal LIKE ?';
+    } else if (searchBy === 'ville') {
+        sqlQuery += 'ville LIKE ?';
+    }
+
+    sqlQuery += ' ORDER BY ';
+
+    if (sortBy === 'nom') {
+        sqlQuery += 'nom';
+    } else if (sortBy === 'numero') {
+        sqlQuery += 'numero';
+    } else if (sortBy === 'rue') {
+        sqlQuery += 'voie';
+    } else if (sortBy === 'codePostal') {
+        sqlQuery += 'code_postal';
+    } else if (sortBy === 'ville') {
+        sqlQuery += 'ville';
+    }
+
+    sqlQuery += ' LIMIT ? OFFSET ?';
+
+    db.all(sqlQuery, [`%${term}%`, LIMIT, OFFSET], (err, rows) => {
+        if (err) {
+            console.error('Erreur lors de la recherche de coiffeurs dans la base de données :', err);
+            res.status(500).send('Erreur lors de la recherche de coiffeurs dans la base de données');
+        } else {
+            res.send(rows);
         }
     });
 });

@@ -3,6 +3,7 @@ const limit = 8;
 let offset = 0;
 let isLogged = false;
 let NbFavorites = 0;
+let moreSearch = false;
 
 let MyActualHairDresser = [
     {
@@ -45,10 +46,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const ChangeHairDresser = document.getElementById("ChangeHairDresser")
     const AddHairDresser = document.getElementById("AddHairDresser")
     const NbFavoritesHairDressers = document.getElementById("NbFavoritesHairDressers")
+    const divSearch = document.getElementById("divSearch")
+    const MoreSearch = document.getElementById("MoreSearch")
 
     DisplayHairDressers();
     StatusConnected();
 
+    divSearch.classList.add("hidden")
+
+    MoreSearch.addEventListener('click', MoreBarSearch)
     LoadHairDressers.addEventListener('click', LoadButton);
     SearchHairDressers.addEventListener('keyup', SearchButton);
     CloseHairDresser.addEventListener('click', CloseX);
@@ -63,6 +69,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function MoreBarSearch() {
+        if (moreSearch === false) {
+            moreSearch = true;
+            divSearch.classList.remove("hidden")
+        }else if (moreSearch === true) {
+            moreSearch = false;
+            divSearch.classList.add("hidden")
+        }
+    }
     function OpenInsertion() {
         pageListSearch.classList.add("details");
         SearchHairDressers.classList.add("searchDetails")
@@ -187,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (DivHairDresser.classList.contains("Purple")) {
             pageListSearch.classList.remove("details");
             DivHairDresser.classList.remove("Purple");
-            SearchHairDressers.classList.remove("searchDetails")
+            SearchHairDressers.classList.remove("moreSearch")
             CloseHairDresser.style.transform = 'rotate(0deg) scale(0)';
         } else {
             const allHairDressers = document.querySelectorAll('.DivHairDresser');
@@ -197,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pageListSearch.classList.add("details");
             BackList.classList.add("details");
             DivHairDresser.classList.add("Purple");
-            SearchHairDressers.classList.add("searchDetails")
+            SearchHairDressers.classList.add("moreSearch")
             CloseHairDresser.style.transform = 'rotate(0deg) scale(1)';
         }
         MyActualHairDresser.id = data[i].id;
@@ -291,7 +306,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 DivStarsAndInfos.classList.add('DivStarsAndInfos');
 
                 let starIcon = document.createElement('i')
-                const id = MyActualHairDresser.id;;
                 if (isLogged) {
                     starIcon.classList.add('fas', 'fa-star');
                     starIcon.addEventListener('click', function (event) {
@@ -299,35 +313,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (starIcon.classList.contains('favorite')) {
                             starIcon.classList.remove('favorite');
                             NbFavorites--;
-                            fetch(localhost + '/api/favorite/' + id, {
+                            fetch(localhost + '/api/favorite0/' + data[i].id, {
                                 method: "PUT"
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        console.log('Coiffeur retiré des favoris');
-                                    } else {
-                                        console.error('Erreur lors de la requête');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Erreur lors de la requête:', error);
-                                });
+                            }).then()
                         } else {
                             starIcon.classList.add('favorite');
                             NbFavorites++;
-                            fetch(localhost + '/api/favorite/' + id, {
+                            fetch(localhost + '/api/favorite1/' + data[i].id, {
                                 method: "PUT"
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        console.log('Coiffeur ajouté aux favoris');
-                                    } else {
-                                        console.error('Erreur lors de la requête');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Erreur lors de la requête:', error);
-                                });
+                            }).then()
                         }
                         if (NbFavorites === 0) {
                             NbFavoritesHairDressers.innerText = "";
@@ -359,16 +353,52 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     function SearchButton(offset) {
-        const searchQuery = SearchHairDressers.value;
-        fetch(`/api/searchHairdressers?term=${searchQuery}&offset=${offset}`)
-            .then(response => response.json())
-            .then(data => {
-                ListHairDressers.innerHTML = '';
-                DataHairDressers(data);
-            })
-            .catch(error => {
-                console.error('Erreur lors de la recherche de coiffeurs :', error);
-            });
+        const searchQuery = document.getElementById("SearchHairDressers").value;
+        const selectOne = document.getElementById("selectOne");
+        const selectTwo = document.getElementById("selectTwo");
+
+        const basicFetchData = () => {
+            fetch(`/api/searchHairdressers?term=${searchQuery}&offset=${offset}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la recherche de coiffeurs');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    ListHairDressers.innerHTML = '';
+                    DataHairDressers(data);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche de coiffeurs :', error);
+                });
+        };
+
+        const advancedFetchData = () => {
+            const selectOneValue = selectOne.value;
+            const selectTwoValue = selectTwo.value;
+
+            fetch(`/api/searchHairdressers?term=${searchQuery}&offset=${offset}&searchBy=${selectOneValue}&sortBy=${selectTwoValue}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la recherche de coiffeurs');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    ListHairDressers.innerHTML = '';
+                    DataHairDressers(data);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche de coiffeurs :', error);
+                });
+        };
+
+        selectOne.addEventListener('change', advancedFetchData);
+        selectTwo.addEventListener('change', advancedFetchData);
+
+        basicFetchData(); // Fetch basic data initially
+        advancedFetchData(); // Fetch advanced data initially
     }
     function DisplayHairDressers() {
         fetchData(offset);
