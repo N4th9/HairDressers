@@ -48,9 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const NbFavoritesHairDressers = document.getElementById("NbFavoritesHairDressers")
     const divSearch = document.getElementById("divSearch")
     const MoreSearch = document.getElementById("MoreSearch")
+    let NbHairDressersElement = document.getElementById("NbHairDressers");
 
     DisplayHairDressers();
     StatusConnected();
+    ShowNbHairDressers();
 
     divSearch.classList.add("hidden")
 
@@ -69,6 +71,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function ShowNbHairDressers() {
+        fetch(localhost + `/api/NbHairDressers`)
+            .then(response => response.json())
+            .then(data => {
+                NbHairDressersElement.innerText = data.count + " coiffeurs";
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération du nombre de coiffeurs :', error);
+            });
+    }
     function MoreBarSearch() {
         if (moreSearch === false) {
             moreSearch = true;
@@ -367,6 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     ListHairDressers.innerHTML = '';
+                    NbHairDressersElement.innerText = data.length + " coiffeurs"; // Mise à jour du nombre de coiffeurs trouvés
                     DataHairDressers(data);
                 })
                 .catch(error => {

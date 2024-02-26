@@ -162,3 +162,13 @@ app.get('/api/searchHairdressers', (req, res) => {
         }
     });
 });
+app.get('/api/NbHairDressers', (req, res) => {
+    db.get('SELECT COUNT(*) AS count FROM coiffeurs', (err, row) => {
+        if (err) {
+            console.error('Erreur lors du comptage des coiffeurs dans la base de données :', err);
+            res.status(500).send('Erreur lors du comptage des coiffeurs dans la base de données');
+        } else {
+            res.send({ count: row.count });
+        }
+    });
+})
